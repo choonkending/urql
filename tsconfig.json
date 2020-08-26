@@ -14,7 +14,7 @@
     "noEmit": true,
     "lib": ["dom", "esnext"],
     "jsx": "react",
-    "module": "es2015",
+    "module": "esnext",
     "moduleResolution": "node",
     "target": "esnext",
     "strict": true,

@@ -30,10 +30,16 @@ const sha256Browser = (bytes: Uint8Array): Promise<Uint8Array> => {
   });
 };
 
-const nodeCrypto =
-  typeof window === 'undefined' ? eval("require('crypto')") : null;
+const getNodeCrypto = async () => import('crypto').catch(e => {
+  console.log('e', e);
+  return null;
+});
+// const nodeCrypto =
+//   typeof window === 'undefined' ? eval("require('crypto')") : null;
 
 export const hash = async (query: string): Promise<string> => {
+  const nodeCrypto = await getNodeCrypto();
+
   if (
     typeof window === 'undefined'
       ? !nodeCrypto || !nodeCrypto.createHash
@@ -54,7 +60,8 @@ export const hash = async (query: string): Promise<string> => {
   }
 
   // Node.js support
-  if (typeof window === 'undefined') {
+  if (typeof window === 'undefined' && nodeCrypto) {
+    console.log('------------------------------------------------------------------------------');
     return Promise.resolve(
       '' + nodeCrypto.createHash('sha256').update(query).digest('hex')
     );
